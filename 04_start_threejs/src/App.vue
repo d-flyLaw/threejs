@@ -13,7 +13,13 @@ const scene = new THREE.Scene();
 /**
  * 创建渲染器 - 实例化一个 WebGL 渲染器对象
  */
-const render = new THREE.WebGLRenderer();
+const render = new THREE.WebGLRenderer({
+    antialias: true, // 设置渲染器锯齿属性
+});
+// 设置设备像素比，避免画面输出模糊
+render.setPixelRatio(window.devicePixelRatio);
+// 设置画布背景颜色
+render.setClearColor(0x444444, 1);
 // 定义 threejs 输出画布的尺寸（单位：像素px）
 render.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(render.domElement);
@@ -38,6 +44,14 @@ camera.lookAt(1000, 0, 1000);
  * 创建几何体
  */
 const geometry = new THREE.BoxGeometry(100, 100, 100);
+// SphereGeometry：球体
+// const geometry = new THREE.SphereGeometry(50);
+// CylinderGeometry：圆柱
+// const geometry = new THREE.CylinderGeometry(50, 50, 100);
+// PlaneGeometry：矩形平面
+// const geometry = new THREE.PlaneGeometry(100, 50);
+// CircleGeometry：圆形平面
+// const geometry = new THREE.CircleGeometry(50);
 
 /**
  * 光源
@@ -57,20 +71,28 @@ scene.add(pointLight);
 /**
  * 创建并设置材质：
  *        - 不受光照影响
- *                - 基础网格材质 MeshBasicMaterial
+ *                - 基础网格材质 MeshBasicMaterial（默认材质正面可见，可以通过设置 side 属性进行改变）
  *        - 受光照影响
  *                - 漫反射网格材质 MeshLambertMaterial
- *                - 高光 MeshPhongMaterial
+ *                - 高光网格材质 MeshPhongMaterial
  *                - 物理
  *                        - MeshStandardMaterial
  *                        - MeshPhysicalMaterial
  */
+// 基础网格材质
 // const material = new THREE.MeshBasicMaterial({
 //     color: "0x0000ff", // 设置材质颜色
 //     transparent: true, // 开启透明
 //     opacity: 0.5, // 设置透明度
+//     side: THREE.FrontSide, // THREE.FrontSide - 默认只有正面可见 | THREE.DoubleSide - 两面可见
 // });
-//材质对象Material
+// 高光网格材质（模拟镜面反射，产生一个高光效果）
+// const material = new THREE.MeshPhongMaterial({
+//     color: 0x0000ff, // 设置材质颜色
+//     shininess: 20, // 高光亮度，可以控制高光反射效果（默认为 30）
+//     specular: 0x444444, // 高光颜色属性
+// });
+// 材质对象 Material
 const material = new THREE.MeshLambertMaterial({
     color: 0x00ffff, //设置材质颜色
     transparent: true, //开启透明
